@@ -1,0 +1,97 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter assemble --no-version-check --output=/Users/johnlee/Library/Developer/Xcode/DerivedData/Runner-ckwqcnusvryrrvebkflgahfxodsu/Build/Products/Debug/ -dTargetPlatform=ios -dTargetFile=/Users/johnlee/Library/CloudStorage/OneDrive-COMMzSystemsPteLtd/MobileApps/sg_radio_app/lib/main.dart -dBuildMode=debug -dConfiguration=Debug -dIosArchs=arm64 x86_64 -dSdkRoot=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -dSplitDebugInfo= -dTreeShakeIcons=false -dTrackWidgetCreation=true -dDartObfuscation=false -dAction=build -dFrontendServerStarterPath= --ExtraGenSnapshotOptions= --DartDefines=RkxVVFRFUl9WRVJTSU9OPTMuNDEuNw==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049Y2MwNzM0YWM3MQ==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NTlhYTU4NGZkZg==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMS41 --ExtraFrontEndOptions= -dSrcRoot=/Users/johnlee/Library/CloudStorage/OneDrive-COMMzSystemsPteLtd/MobileApps/sg_radio_app/ios -dTargetDeviceOSVersion=26.3.1 -dCodesignIdentity=E543A59CCD8BB212A85A02D56F1464BCA0683692 debug_ios_bundle_flutter_assets
+
+## exception
+
+_TypeError: Null check operator used on a null value
+
+```
+#0      IOSAssetTarget._getIOSConfig (package:flutter_tools/src/isolated/native_assets/targets.dart:279:95)
+#1      IOSAssetTarget.extensions (package:flutter_tools/src/isolated/native_assets/targets.dart:291:16)
+#2      _runDartHooks (package:flutter_tools/src/isolated/native_assets/native_assets.dart:532:27)
+#3      runFlutterSpecificHooks (package:flutter_tools/src/isolated/native_assets/native_assets.dart:91:10)
+<asynchronous suspension>
+#4      DartBuild.build (package:flutter_tools/src/build_system/targets/native_assets.dart:76:14)
+<asynchronous suspension>
+#5      _BuildInstance._invokeInternal (package:flutter_tools/src/build_system/build_system.dart:937:9)
+<asynchronous suspension>
+#6      Future.wait.<anonymous closure> (dart:async/future.dart:546:21)
+<asynchronous suspension>
+#7      _BuildInstance.invokeTarget (package:flutter_tools/src/build_system/build_system.dart:875:32)
+<asynchronous suspension>
+#8      FlutterBuildSystem.build (package:flutter_tools/src/build_system/build_system.dart:684:16)
+<asynchronous suspension>
+#9      AssembleCommand.runCommand (package:flutter_tools/src/commands/assemble.dart:365:32)
+<asynchronous suspension>
+#10     FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1590:27)
+<asynchronous suspension>
+#11     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#12     CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#13     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:496:9)
+<asynchronous suspension>
+#14     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#15     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:431:5)
+<asynchronous suspension>
+#16     FlutterCommandRunner.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:307:33)
+<asynchronous suspension>
+#17     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:104:11)
+<asynchronous suspension>
+#18     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#19     main (package:flutter_tools/executable.dart:103:3)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[!] Flutter (Channel stable, 3.41.7, on macOS 26.4.1 25E253 darwin-arm64, locale en-US) [333ms]
+    • Flutter version 3.41.7 on channel stable at /opt/homebrew/share/flutter
+    ! The flutter binary is not on your path. Consider adding /opt/homebrew/share/flutter/bin to your path.
+    ! The dart binary is not on your path. Consider adding /opt/homebrew/share/flutter/bin to your path.
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision cc0734ac71 (11 days ago), 2026-04-15 21:21:08 -0700
+    • Engine revision 59aa584fdf
+    • Dart version 3.11.5
+    • DevTools version 2.54.2
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration
+    • If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[✗] Android toolchain - develop for Android devices [226ms]
+    ✗ Unable to locate Android SDK.
+      Install Android Studio from: https://developer.android.com/studio/index.html
+      On first launch it will assist you in installing the Android SDK components.
+      (or visit https://flutter.dev/to/macos-android-setup for detailed instructions).
+      If the Android SDK has been installed to a custom location, please use
+      `flutter config --android-sdk` to update to that location.
+
+
+[!] Xcode - develop for iOS and macOS (Xcode 26.4.1) [498ms]
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Build 17E202
+    ✗ CocoaPods not installed.
+        CocoaPods is a package manager for iOS or macOS platform code.
+        Without CocoaPods, plugins will not work on iOS or macOS.
+        For more info, see https://flutter.dev/to/platform-plugins
+      For installation instructions, see https://guides.cocoapods.org/using/getting-started.html#installation
+
+[✓] Chrome - develop for the web [7ms]
+    • Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+[✓] Connected device (3 available) [8.2s]
+    • JLiPhone15Pro (wireless) (mobile) • 00008150-001160903AC0401C • ios            • iOS 26.3.1 23D8133
+    • macOS (desktop)                   • macos                     • darwin-arm64   • macOS 26.4.1 25E253 darwin-arm64
+    • Chrome (web)                      • chrome                    • web-javascript • Google Chrome 147.0.7727.102
+
+[✓] Network resources [1,048ms]
+    • All expected network resources are available.
+
+! Doctor found issues in 3 categories.
+```

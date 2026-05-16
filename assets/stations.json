@@ -1,0 +1,128 @@
+[
+  {
+    "id": 1,
+    "name": "88.3 JIA",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/883JIAAAC.aac",
+    "genre": "Mandarin Hits",
+    "image": "883.png"
+  },
+  {
+    "id": 2,
+    "name": "96.3 Hao FM",
+    "stream": "https://22283.live.streamtheworld.com/HAO_963.mp3",
+    "genre": "Mandarin Classics",
+    "image": "963.png"
+  },
+  {
+    "id": 3,
+    "name": "987FM",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/987FMAAC.aac",
+    "genre": "Top 40 / Pop",
+    "image": "987.png"
+  },
+  {
+    "id": 4,
+    "name": "BBC World Service SG Relay",
+    "stream": "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service",
+    "genre": "International News",
+    "image": "bbc.png"
+  },
+  {
+    "id": 5,
+    "name": "CAPITAL 958",
+    "stream": "https://28443.live.streamtheworld.com/CAPITAL958FM_SC",
+    "genre": "Chinese Talk",
+    "image": "958.png"
+  },
+  {
+    "id": 6,
+    "name": "CLASS 95",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/CLASS95.mp3",
+    "genre": "English Hits",
+    "image": "95.png"
+  },
+  {
+    "id": 7,
+    "name": "CNA938",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/938NOWAAC_SC",
+    "genre": "News / Talk",
+    "image": "938.png"
+  },
+  {
+    "id": 8,
+    "name": "GOLD 905",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/GOLD905.mp3",
+    "genre": "Classic Hits",
+    "image": "905.png"
+  },
+  {
+    "id": 9,
+    "name": "Kiss92",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/KISS_92AAC.aac",
+    "genre": "Pop Hits",
+    "image": "92.png"
+  },
+  {
+    "id": 10,
+    "name": "LOVE 972",
+    "stream": "https://28373.live.streamtheworld.com/LOVE972FMAAC_SC",
+    "genre": "Mandarin Love Songs",
+    "image": "972.png"
+  },
+  {
+    "id": 11,
+    "name": "Money FM 89.3",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/MONEY_893AAC.aac",
+    "genre": "Business News",
+    "image": "893.png"
+  },
+  {
+    "id": 12,
+    "name": "Oli 96.8",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/OLI968FMAAC_SC",
+    "genre": "Tamil",
+    "image": "968.png"
+  },
+  {
+    "id": 13,
+    "name": "ONE FM 91.3",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/ONE_FM_913AAC_SC",
+    "genre": "English Hits",
+    "image": "913.png"
+  },
+  {
+    "id": 14,
+    "name": "Power 98",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/POWER98_LOVESONGSAAC.aac",
+    "genre": "Contemporary Hits",
+    "image": "98.png"
+  },
+  {
+    "id": 15,
+    "name": "Symphony 924",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/SYMPHONY924.mp3",
+    "genre": "Classical",
+    "image": "924.png"
+  },
+  {
+    "id": 16,
+    "name": "UFM 100.3",
+    "stream": "https://28093.live.streamtheworld.com/UFM_1003AAC_SC",
+    "genre": "Mandarin Hits",
+    "image": "1003.png"
+  },
+  {
+    "id": 17,
+    "name": "Warna 94.2",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/WARNA942FMAAC_SC",
+    "genre": "Malay",
+    "image": "942.png"
+  },
+  {
+    "id": 18,
+    "name": "YES 933",
+    "stream": "https://playerservices.streamtheworld.com/api/livestream-redirect/YES933.mp3",
+    "genre": "Mandarin Pop",
+    "image": "933.png"
+  }
+]
