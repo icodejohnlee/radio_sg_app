@@ -18,7 +18,7 @@ packages:
     source: hosted
     version: "2.13.1"
   audio_service:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: audio_service
       sha256: cb122c7c2639d2a992421ef96b67948ad88c5221da3365ccef1031393a76e044
@@ -42,7 +42,7 @@ packages:
     source: hosted
     version: "0.1.4"
   audio_session:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: audio_session
       sha256: "7217b229db57cc4dc577a8abb56b7429a5a212b978517a5be578704bfe5e568b"
@@ -90,7 +90,7 @@ packages:
     source: hosted
     version: "1.19.1"
   connectivity_plus:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: connectivity_plus
       sha256: b5e72753cf63becce2c61fd04dfe0f1c430cc5278b53a1342dc5ad839eab29ec
@@ -209,7 +209,7 @@ packages:
     source: hosted
     version: "1.0.3"
   http:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: http
       sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
@@ -249,7 +249,7 @@ packages:
     source: hosted
     version: "0.7.2"
   just_audio:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: just_audio
       sha256: "9694e4734f515f2a052493d1d7e0d6de219ee0427c7c29492e246ff32a219908"
@@ -457,7 +457,7 @@ packages:
     source: hosted
     version: "2.1.8"
   provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: provider
       sha256: "4e82183fa20e5ca25703ead7e05de9e4cceed1fbd1eadc1ac3cb6f565a09f272"
@@ -489,7 +489,7 @@ packages:
     source: hosted
     version: "0.28.0"
   shared_preferences:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: shared_preferences
       sha256: c3025c5534b01739267eb7d76959bbc25a6d10f6988e1c2a3036940133dd10bf

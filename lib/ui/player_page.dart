@@ -38,14 +38,14 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   void checkNetwork() async {
-    final result = await Connectivity().checkConnectivity();
+    final results = await Connectivity().checkConnectivity();
     setState(() {
-      isOffline = result == ConnectivityResult.none;
+      isOffline = results.every((r) => r == ConnectivityResult.none);
     });
 
-    Connectivity().onConnectivityChanged.listen((result) {
+    Connectivity().onConnectivityChanged.listen((results) {
       setState(() {
-        isOffline = result == ConnectivityResult.none;
+        isOffline = results.every((r) => r == ConnectivityResult.none);
       });
     });
   }
