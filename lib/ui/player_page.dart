@@ -77,14 +77,13 @@ class _PlayerPageState extends State<PlayerPage> {
   Future<void> togglePlay() async {
     if (isOffline || current == null) return;
     if (isPlaying) {
+      setState(() => isPlaying = false);
       await player.stop();
-      isPlaying = false;
     } else {
+      setState(() => isPlaying = true);
       await player.play(current!);
       FavoritesService.saveLast(current!.name);
-      isPlaying = true;
     }
-    setState(() {});
   }
 
   void refreshFavorites() async {
@@ -229,12 +228,13 @@ class _PlayerPageState extends State<PlayerPage> {
 
                         return GestureDetector(
                           onTap: () async {
-                            setState(() => current = s);
+                            setState(() {
+                              current = s;
+                              isPlaying = true;
+                            });
                             if (!isOffline) {
                               await player.play(s);
                               FavoritesService.saveLast(s.name);
-                              isPlaying = true;
-                              setState(() {});
                             }
                           },
                           child: Container(
@@ -306,7 +306,7 @@ class _PlayerPageState extends State<PlayerPage> {
             bottom: 0,
             width: menuWidth,
             child: Material(
-              color: Colors.black.withOpacity(0.95),
+              color: Colors.black.withValues(alpha: 0.95),
               child: SafeArea(
                 child: Column(
                   children: [

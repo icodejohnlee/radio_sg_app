@@ -10,7 +10,9 @@ class RadioPlayer {
     currentStation = station;
     final old = _audioPlayer;
     _audioPlayer = AudioPlayer();
-    try { await old.dispose(); } catch (_) {}
+    // Stop old stream immediately, then dispose in background
+    try { await old.stop(); } catch (_) {}
+    old.dispose().catchError((_) {});
     await _audioPlayer.setUrl(station.stream);
     await _audioPlayer.play();
   }
@@ -18,7 +20,9 @@ class RadioPlayer {
   Future<void> stop() async {
     final old = _audioPlayer;
     _audioPlayer = AudioPlayer();
-    try { await old.dispose(); } catch (_) {}
+    // Stop immediately, dispose in background
+    try { await old.stop(); } catch (_) {}
+    old.dispose().catchError((_) {});
   }
 
   bool get isPlaying => _audioPlayer.playing;
