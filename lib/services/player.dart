@@ -2,42 +2,27 @@ import 'package:just_audio/just_audio.dart';
 import '../models/station.dart';
 
 class RadioPlayer {
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  AudioPlayer _audioPlayer = AudioPlayer();
 
   Station? currentStation;
 
-  /// Play selected station
   Future<void> play(Station station) async {
-    try {
-      currentStation = station;
-
-      // Stop previous stream first (important for switching)
-      await _audioPlayer.stop();
-
-      // Load new stream
-      await _audioPlayer.setUrl(station.stream);
-
-      // Play audio
-      await _audioPlayer.play();
-    } catch (e) {
-      throw Exception("Failed to play station: $e");
-    }
+    currentStation = station;
+    final old = _audioPlayer;
+    _audioPlayer = AudioPlayer();
+    try { await old.dispose(); } catch (_) {}
+    await _audioPlayer.setUrl(station.stream);
+    await _audioPlayer.play();
   }
 
-  /// Pause playback
-  Future<void> pause() async {
-    await _audioPlayer.pause();
-  }
-
-  /// Stop playback completely
   Future<void> stop() async {
-    await _audioPlayer.stop();
+    final old = _audioPlayer;
+    _audioPlayer = AudioPlayer();
+    try { await old.dispose(); } catch (_) {}
   }
 
-  /// Check if playing
   bool get isPlaying => _audioPlayer.playing;
 
-  /// Dispose player (optional but good practice)
   void dispose() {
     _audioPlayer.dispose();
   }

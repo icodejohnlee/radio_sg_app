@@ -74,18 +74,16 @@ class _PlayerPageState extends State<PlayerPage> {
   List<Station> get favStations =>
       stations.where((s) => favorites.contains(s.name)).toList();
 
-  void togglePlay() {
+  Future<void> togglePlay() async {
     if (isOffline || current == null) return;
-
     if (isPlaying) {
-      player.stop();
+      await player.stop();
       isPlaying = false;
     } else {
-      player.play(current!);
+      await player.play(current!);
       FavoritesService.saveLast(current!.name);
       isPlaying = true;
     }
-
     setState(() {});
   }
 
@@ -230,17 +228,14 @@ class _PlayerPageState extends State<PlayerPage> {
                             current?.name == s.name;
 
                         return GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             setState(() => current = s);
-
                             if (!isOffline) {
-                              player.play(s);
-                              FavoritesService.saveLast(
-                                  s.name);
+                              await player.play(s);
+                              FavoritesService.saveLast(s.name);
                               isPlaying = true;
+                              setState(() {});
                             }
-
-                            setState(() {});
                           },
                           child: Container(
                             margin:
