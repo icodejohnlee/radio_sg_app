@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../models/station.dart';
-import '../services/player.dart';
+import '../services/radio_handler.dart';
 import '../services/station_loader.dart';
 import '../services/favorites_service.dart';
 import 'bubble_bg.dart';
@@ -9,15 +9,14 @@ import 'station_list_page.dart';
 import 'audio_visualizer.dart';
 
 class PlayerPage extends StatefulWidget {
-  const PlayerPage({super.key});
+  final RadioHandler handler;
+  const PlayerPage({super.key, required this.handler});
 
   @override
   State<PlayerPage> createState() => _PlayerPageState();
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  final RadioPlayer player = RadioPlayer();
-
   List<Station> stations = [];
   List<String> favorites = [];
 
@@ -27,7 +26,6 @@ class _PlayerPageState extends State<PlayerPage> {
 
   bool showMenu = false;
 
-  // 🔥 NEW MENU WIDTH
   final double menuWidth = 320;
 
   @override
@@ -63,7 +61,7 @@ class _PlayerPageState extends State<PlayerPage> {
           (s) => s.name == last,
           orElse: () => stations.first,
         );
-        player.play(current!);
+        widget.handler.playStation(current!);
         isPlaying = true;
       }
     }
@@ -78,10 +76,10 @@ class _PlayerPageState extends State<PlayerPage> {
     if (isOffline || current == null) return;
     if (isPlaying) {
       setState(() => isPlaying = false);
-      await player.stop();
+      await widget.handler.stop();
     } else {
       setState(() => isPlaying = true);
-      await player.play(current!);
+      await widget.handler.playStation(current!);
       FavoritesService.saveLast(current!.name);
     }
   }
@@ -115,14 +113,12 @@ class _PlayerPageState extends State<PlayerPage> {
           SafeArea(
             child: Column(
               children: [
-                // 🔥 UPDATED TOP BAR (LEFT ALIGN)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.menu,
-                            color: Colors.white),
+                        icon: const Icon(Icons.menu, color: Colors.white),
                         onPressed: () {
                           setState(() {
                             showMenu = true;
@@ -130,7 +126,6 @@ class _PlayerPageState extends State<PlayerPage> {
                         },
                       ),
                       const SizedBox(width: 8),
-
                       const Text(
                         "Radio SG",
                         style: TextStyle(
@@ -148,8 +143,7 @@ class _PlayerPageState extends State<PlayerPage> {
                 if (isOffline)
                   const Column(
                     children: [
-                      Icon(Icons.signal_wifi_off,
-                          color: Colors.red, size: 60),
+                      Icon(Icons.signal_wifi_off, color: Colors.red, size: 60),
                       SizedBox(height: 10),
                       Text(
                         "No Signal / Offline",
@@ -200,13 +194,10 @@ class _PlayerPageState extends State<PlayerPage> {
                           height: 100,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color:
-                                isPlaying ? Colors.red : Colors.green,
+                            color: isPlaying ? Colors.red : Colors.green,
                           ),
                           child: Icon(
-                            isPlaying
-                                ? Icons.stop
-                                : Icons.play_arrow,
+                            isPlaying ? Icons.stop : Icons.play_arrow,
                             color: Colors.white,
                             size: 45,
                           ),
@@ -223,8 +214,7 @@ class _PlayerPageState extends State<PlayerPage> {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: favStations.map((s) {
-                        final selected =
-                            current?.name == s.name;
+                        final selected = current?.name == s.name;
 
                         return GestureDetector(
                           onTap: () async {
@@ -233,32 +223,27 @@ class _PlayerPageState extends State<PlayerPage> {
                               isPlaying = true;
                             });
                             if (!isOffline) {
-                              await player.play(s);
+                              await widget.handler.playStation(s);
                               FavoritesService.saveLast(s.name);
                             }
                           },
                           child: Container(
-                            margin:
-                                const EdgeInsets.all(8),
+                            margin: const EdgeInsets.all(8),
                             child: Column(
                               children: [
                                 Container(
                                   width: 65,
                                   height: 65,
-                                  decoration:
-                                      BoxDecoration(
-                                    shape:
-                                        BoxShape.circle,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
                                     border: Border.all(
                                       color: selected
                                           ? Colors.green
                                           : Colors.white24,
                                       width: 3,
                                     ),
-                                    image:
-                                        DecorationImage(
-                                      image: AssetImage(
-                                          img(s.image)),
+                                    image: DecorationImage(
+                                      image: AssetImage(img(s.image)),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -298,7 +283,7 @@ class _PlayerPageState extends State<PlayerPage> {
               ),
             ),
 
-          // 🔥 BIGGER MENU PANEL
+          // MENU PANEL
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             left: showMenu ? 0 : -menuWidth,
@@ -320,7 +305,6 @@ class _PlayerPageState extends State<PlayerPage> {
                       ),
                     ),
                     const Divider(color: Colors.white24),
-
                     Expanded(
                       child: StationListPage(
                         onChanged: refreshFavorites,
