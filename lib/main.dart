@@ -1,27 +1,28 @@
-import 'package:audio_service/audio_service.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:audio_service/audio_service.dart';
 import 'services/radio_handler.dart';
 import 'ui/player_page.dart';
 
+RadioHandler? _audioHandler;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final handler = await AudioService.init(
-    builder: () => RadioHandler(),
-    config: const AudioServiceConfig(
-      androidNotificationChannelId: 'com.icodejohnlee.sg_radio_app.channel',
-      androidNotificationChannelName: 'Radio SG',
-      androidNotificationOngoing: true,
-      androidStopForegroundOnPause: true,
-    ),
-  );
-
-  runApp(SGRadioApp(handler: handler));
+  if (Platform.isIOS) {
+    _audioHandler = await AudioService.init(
+      builder: () => RadioHandler(),
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.radiosg.channel',
+        androidNotificationChannelName: 'Radio SG',
+      ),
+    );
+  }
+  runApp(SGRadioApp(audioHandler: _audioHandler));
 }
 
 class SGRadioApp extends StatelessWidget {
-  final RadioHandler handler;
-  const SGRadioApp({super.key, required this.handler});
+  final RadioHandler? audioHandler;
+  const SGRadioApp({super.key, this.audioHandler});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class SGRadioApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SG Radio',
       theme: ThemeData.dark(),
-      home: PlayerPage(handler: handler),
+      home: PlayerPage(audioHandler: audioHandler),
     );
   }
 }

@@ -6,7 +6,16 @@ import 'package:path_provider/path_provider.dart';
 import '../models/station.dart';
 
 class RadioHandler extends BaseAudioHandler {
-  final AudioPlayer _player = AudioPlayer();
+  final AudioPlayer _player = AudioPlayer(
+    audioLoadConfiguration: AudioLoadConfiguration(
+      androidLoadControl: AndroidLoadControl(
+        minBufferDuration: const Duration(milliseconds: 50),
+        maxBufferDuration: const Duration(milliseconds: 50),
+        bufferForPlaybackDuration: const Duration(milliseconds: 50),
+        bufferForPlaybackAfterRebufferDuration: const Duration(milliseconds: 50),
+      ),
+    ),
+  );
   Station? currentStation;
 
   RadioHandler() {
@@ -69,7 +78,7 @@ class RadioHandler extends BaseAudioHandler {
       processingState: const {
         ProcessingState.idle: AudioProcessingState.idle,
         ProcessingState.loading: AudioProcessingState.loading,
-        ProcessingState.buffering: AudioProcessingState.buffering,
+        ProcessingState.buffering: AudioProcessingState.ready,
         ProcessingState.ready: AudioProcessingState.ready,
         ProcessingState.completed: AudioProcessingState.completed,
       }[_player.processingState]!,
