@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:audio_session/audio_session.dart';
 import '../models/station.dart';
-import '../services/player.dart';
-import '../services/radio_handler.dart';
 import '../services/station_loader.dart';
 import '../services/favorites_service.dart';
 import 'bubble_bg.dart';
@@ -11,23 +9,19 @@ import 'station_list_page.dart';
 import 'audio_visualizer.dart';
 
 class PlayerPage extends StatefulWidget {
-  final RadioHandler? audioHandler;
-  const PlayerPage({super.key, this.audioHandler});
+  const PlayerPage({super.key});
 
   @override
   State<PlayerPage> createState() => _PlayerPageState();
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  // Android only — iOS uses widget.audioHandler via audio_service
-  late final RadioPlayer? _player = Platform.isAndroid ? RadioPlayer() : null;
+  final AudioPlayer _player = AudioPlayer();
 
   List<Station> stations = [];
   List<String> favorites = [];
-
   Station? current;
   bool isPlaying = false;
-  bool isOffline = false;
   bool showMenu = false;
 
   final double menuWidth = 320;
@@ -35,90 +29,71 @@ class _PlayerPageState extends State<PlayerPage> {
   @override
   void initState() {
     super.initState();
-    _load();
-    _checkNetwork();
+    _setupAndLoad();
   }
 
-  Future<void> _play(Station s) async {
-    if (Platform.isIOS) {
-      await widget.audioHandler!.playStation(s);
-    } else {
-      await _player!.play(s);
-    }
+  Future<void> _setupAndLoad() async {
+    await _setupAudio();
+    await _load();
   }
 
-  Future<void> _stop() async {
-    if (Platform.isIOS) {
-      await widget.audioHandler!.stop();
-    } else {
-      await _player!.stop();
-    }
+  Future<void> _setupAudio() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
   }
 
-  @override
-  void dispose() {
-    _player?.dispose();
-    super.dispose();
-  }
+  Future<void> _load() async {
+    final results = await Future.wait([
+      StationLoader.load(),
+      FavoritesService.getFavorites(),
+      FavoritesService.getLast(),
+    ]);
 
-  void _checkNetwork() async {
-    final results = await Connectivity().checkConnectivity();
-    setState(() {
-      isOffline = results.every((r) => r == ConnectivityResult.none);
-    });
-    Connectivity().onConnectivityChanged.listen((results) {
-      if (mounted) {
-        setState(() {
-          isOffline = results.every((r) => r == ConnectivityResult.none);
-        });
-      }
-    });
-  }
-
-  void _load() async {
-    stations = await StationLoader.load();
-    favorites = await FavoritesService.getFavorites();
+    stations = results[0] as List<Station>;
+    favorites = results[1] as List<String>;
+    final last = results[2] as String?;
 
     if (favorites.isEmpty) {
       showMenu = true;
+      setState(() {});
+    } else if (last != null) {
+      final station = stations.firstWhere(
+        (s) => s.name == last,
+        orElse: () => stations.first,
+      );
+      await _play(station);
     } else {
-      final last = await FavoritesService.getLast();
-      if (last != null) {
-        current = stations.firstWhere(
-          (s) => s.name == last,
-          orElse: () => stations.first,
-        );
-        setState(() => isPlaying = true);
-        _play(current!);
-      }
-    }
-
-    setState(() {});
-  }
-
-  List<Station> get favStations =>
-      stations.where((s) => favorites.contains(s.name)).toList();
-
-  Future<void> _togglePlay() async {
-    if (isOffline || current == null) return;
-    if (isPlaying) {
-      setState(() => isPlaying = false);
-      await _stop();
-    } else {
-      setState(() => isPlaying = true);
-      await _play(current!);
-      FavoritesService.saveLast(current!.name);
+      setState(() {});
     }
   }
 
-  Future<void> _switchStation(Station s) async {
-    if (isOffline) return;
+  Future<void> _play(Station s) async {
     setState(() {
       current = s;
       isPlaying = true;
     });
-    await _play(s);
     FavoritesService.saveLast(s.name);
+    try {
+      await _player.stop();
+      await _player.setUrl(s.stream);
+      await _player.play();
+    } catch (_) {
+      setState(() => isPlaying = false);
+    }
+  }
+
+  Future<void> _stop() async {
+    setState(() => isPlaying = false);
+    await _player.stop();
+  }
+
+  Future<void> _togglePlay() async {
+    if (current == null) return;
+    if (isPlaying) {
+      await _stop();
+    } else {
+      await _play(current!);
+    }
   }
 
   void _refreshFavorites() async {
@@ -130,7 +105,16 @@ class _PlayerPageState extends State<PlayerPage> {
     setState(() {});
   }
 
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
+
   String img(String path) => 'assets/$path';
+
+  List<Station> get favStations =>
+      stations.where((s) => favorites.contains(s.name)).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -165,22 +149,7 @@ class _PlayerPageState extends State<PlayerPage> {
 
                 const Spacer(),
 
-                if (isOffline)
-                  const Column(
-                    children: [
-                      Icon(Icons.signal_wifi_off, color: Colors.red, size: 60),
-                      SizedBox(height: 10),
-                      Text(
-                        'No Signal / Offline',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 18,
-                          fontFamily: 'VarelaRound',
-                        ),
-                      ),
-                    ],
-                  )
-                else if (current != null)
+                if (current != null)
                   Column(
                     children: [
                       Container(
@@ -235,7 +204,7 @@ class _PlayerPageState extends State<PlayerPage> {
                       children: favStations.map((s) {
                         final selected = current?.name == s.name;
                         return GestureDetector(
-                          onTap: () => _switchStation(s),
+                          onTap: () => _play(s),
                           child: Container(
                             margin: const EdgeInsets.all(8),
                             child: Container(
@@ -264,7 +233,7 @@ class _PlayerPageState extends State<PlayerPage> {
             ),
           ),
 
-          // Outside tap to close menu
+          // Dim area to close menu
           if (showMenu)
             Positioned.fill(
               child: Row(
@@ -284,7 +253,7 @@ class _PlayerPageState extends State<PlayerPage> {
               ),
             ),
 
-          // Menu panel
+          // Slide-in menu
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             left: showMenu ? 0 : -menuWidth,
